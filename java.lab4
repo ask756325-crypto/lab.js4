@@ -1,0 +1,72 @@
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Main {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Tip Calculator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(350, 250);
+
+        JLabel billLabel = new JLabel("Bill Amount:");
+        JTextField billField = new JTextField(10);
+
+        JLabel tipLabel = new JLabel("Tip Percentage:");
+        String[] options = {"5", "10", "15", "20", "25"};
+        JComboBox<String> tipBox = new JComboBox<>(options);
+        tipBox.setSelectedItem("15");
+
+        JButton button = new JButton("Calculate");
+
+        JLabel tipResult = new JLabel("Tip Amount: 0.00");
+        JLabel totalResult = new JLabel("Total Bill: 0.00");
+
+        button.addActionListener(e -> {
+            try {
+                double bill = Double.parseDouble(billField.getText());
+
+                if (bill < 0) {
+                    JOptionPane.showMessageDialog(
+                        frame, "Bill cannot be negative."
+                    );
+                    return;
+                }
+
+                double percent = Double.parseDouble(
+                    (String) tipBox.getSelectedItem()
+                );
+
+                double tip = bill * percent / 100;
+                double total = bill + tip;
+
+                tipResult.setText(
+                    String.format("Tip Amount: %.2f", tip)
+                );
+                totalResult.setText(
+                    String.format("Total Bill: %.2f", total)
+                );
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(
+                    frame, "Enter a valid bill amount."
+                );
+            }
+        });
+
+        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        panel.add(billLabel);
+        panel.add(billField);
+        panel.add(tipLabel);
+        panel.add(tipBox);
+        panel.add(button);
+        panel.add(new JLabel(""));
+        panel.add(tipResult);
+        panel.add(totalResult);
+
+        frame.add(panel);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+}
